@@ -33,6 +33,8 @@ recommendations_contextual_redis = Redis(app, config_prefix="REDIS_RECOMMENDATIO
 
 recommendations_hstu_redis = Redis(app, config_prefix="REDIS_RECOMMENDATIONS_HSTU")
 
+recommendations_bert4rec_redis = Redis(app, config_prefix="REDIS_RECOMMENDATIONS_BERT4REC")
+
 data_logger = DataLogger(app)
 atexit.register(data_logger.close)
 
@@ -73,6 +75,20 @@ sasrec_i2i_recommender = I2IRecommender(
     recommendations_contextual_redis.connection,
     random_recommender,
 )
+
+catalog.upload_recommendations(
+    recommendations_bert4rec_redis.connection,
+    "RECOMMENDATIONS_BERT4REC_FILE_PATH",
+    key_object="item_id",
+    key_recommendations="recommendations",
+)
+bert4rec_i2i_recommender = I2IRecommender(
+    listen_history_redis.connection,
+    recommendations_bert4rec_redis.connection,
+    random_recommender,
+)
+
+
 
 parser = reqparse.RequestParser()
 parser.add_argument("track", type=int, location="json", required=True)
@@ -117,7 +133,8 @@ class NextTrack(Resource):
         if treatment == Treatment.C:
             recommender = sasrec_i2i_recommender
         elif treatment == Treatment.T1:
-            recommender = Indexed(recommendations_hstu_redis.connection, catalog, random_recommender)
+            # recommender = Indexed(recommendations_hstu_redis.connection, catalog, random_recommender)
+            recommender = bert4rec_i2i_recommender
         else:
             recommender = random_recommender
 
