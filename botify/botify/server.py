@@ -85,7 +85,7 @@ catalog.upload_recommendations(
 bert4rec_i2i_recommender = I2IRecommender(
     listen_history_redis.connection,
     recommendations_bert4rec_redis.connection,
-    random_recommender,
+    sasrec_i2i_recommender,
 )
 
 
