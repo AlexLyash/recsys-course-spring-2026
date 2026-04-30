@@ -29,7 +29,7 @@
   "REDIS_RECOMMENDATIONS_BERT4REC_HOST": "redis",
   "REDIS_RECOMMENDATIONS_BERT4REC_PORT": 6379,
   "REDIS_RECOMMENDATIONS_BERT4REC_DB": 6,
-  "RECOMMENDATIONS_BERT4REC_FILE_PATH": "./data/bert4rec.jsonl",
+  "RECOMMENDATIONS_BERT4REC_FILE_PATH": "./data/bert4rec_plus_sasrec_cooc_mmr.jsonl",
 
   "TRACKS_CATALOG": "./data/tracks.json",
   "DATA_LOG_FILE": "./log/data.json",

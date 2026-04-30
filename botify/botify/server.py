@@ -13,6 +13,7 @@ from gevent.pywsgi import WSGIServer
 from botify.data import DataLogger, Datum
 from botify.experiment import Experiments, Treatment
 from botify.recommenders.i2i import I2IRecommender
+from botify.recommenders.i2i_session_weight import SessionWeightedI2IRecommender
 from botify.recommenders.random import Random
 from botify.recommenders.indexed import Indexed
 from botify.recommenders.sticky_artist import StickyArtist
@@ -82,9 +83,11 @@ catalog.upload_recommendations(
     key_object="item_id",
     key_recommendations="recommendations",
 )
-bert4rec_i2i_recommender = I2IRecommender(
+track_artists = {track.track: track.artist for track in catalog.tracks}
+bert4rec_i2i_recommender = SessionWeightedI2IRecommender(
     listen_history_redis.connection,
     recommendations_bert4rec_redis.connection,
+    track_artists,
     sasrec_i2i_recommender,
 )
 
