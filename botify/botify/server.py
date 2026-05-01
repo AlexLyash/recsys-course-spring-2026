@@ -131,7 +131,7 @@ class NextTrack(Resource):
         args = parser.parse_args()
         persist_user_listen_history(user, args.track, args.time)
 
-        treatment = Experiments.HSTU.assign(user)
+        treatment = Experiments.BERT.assign(user)
 
         if treatment == Treatment.C:
             recommender = sasrec_i2i_recommender
